@@ -5,6 +5,21 @@ All notable changes to cartographer will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-05-26
+
+### Changed
+- README rewritten for the published package: leads with
+  `dart pub global activate cartographer` (the right install model for
+  a CLI tool, and the only one that works around the analyzer 13 /
+  Flutter SDK `meta` pin), surfaces the pub.dev page link, and
+  documents the viewer's full feature set (2D/3D, themes, depth
+  heatmap, upload + drag-drop).
+
+### Fixed
+- CI lint job now installs the Flutter SDK so `dart pub get` resolves
+  the nested `example/` pubspec (Dart 3.11+ auto-discovers nested
+  packages and the example depends on Flutter).
+
 ## [0.1.0] - 2026-05-26
 
 ### Added

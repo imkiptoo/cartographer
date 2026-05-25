@@ -9,9 +9,11 @@ Auto-discover and visualize a Flutter app's navigation graph as an interactive s
 
 Dev-only — never bundled into your release build.
 
+📦 **pub.dev:** [pub.dev/packages/cartographer](https://pub.dev/packages/cartographer)
+
 ## Install
 
-Cartographer is a CLI tool you point *at* a project, not a library you import. The recommended install is via `dart pub global`:
+Cartographer is a CLI tool you point *at* a project, not a library you import. Install it once with `dart pub global` from [pub.dev](https://pub.dev/packages/cartographer):
 
 ```bash
 dart pub global activate cartographer

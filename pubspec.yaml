@@ -1,6 +1,6 @@
 name: cartographer
 description: Auto-discover and visualize a Flutter app's navigation graph as an interactive sitemap. Dev-only.
-version: 0.1.0
+version: 0.2.0
 repository: https://github.com/imkiptoo/cartographer
 issue_tracker: https://github.com/imkiptoo/cartographer/issues
 
