@@ -1,0 +1,37 @@
+# Cartographer config — overrides category inference and pins anchor positions
+# so the demo graph lays out coherently.
+
+categories:
+  - id: entry
+    label: Entry / Splash
+    match: lib/main.dart
+  - id: entry
+    label: Entry / Splash
+    match: lib/screens/splash.dart
+  - id: auth
+    label: Authentication
+    match: lib/screens/auth/
+  - id: home
+    label: Home Shell
+    match: lib/screens/home/
+  - id: browse
+    label: Browse Catalog
+    match: lib/screens/browse/
+  - id: cart
+    label: Cart & Checkout
+    match: lib/screens/cart/
+  - id: profile
+    label: User Profile
+    match: lib/screens/profile/
+  - id: settings
+    label: Settings
+    match: lib/screens/settings/
+
+anchors:
+  entry:    { fx: 0.50, fy: 0.08 }
+  auth:     { fx: 0.20, fy: 0.25 }
+  home:     { fx: 0.50, fy: 0.30 }
+  browse:   { fx: 0.78, fy: 0.50 }
+  cart:     { fx: 0.85, fy: 0.78 }
+  profile:  { fx: 0.30, fy: 0.78 }
+  settings: { fx: 0.08, fy: 0.55 }

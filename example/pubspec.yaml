@@ -1,0 +1,22 @@
+name: example
+description: Cartographer demo — a fictional bookstore with 24 screens, navigation depth 5, and a mix of direct Navigator.push and a custom helper.
+publish_to: none
+version: 0.1.0
+
+environment:
+  sdk: ^3.4.0
+  flutter: ">=3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_lints: ^4.0.0
+
+# To visualize this app's navigation, run from the cartographer repo root:
+#   dart run cartographer --project example --watch
+#
+# We don't add cartographer as a dev dependency here because the Flutter SDK
+# pins `meta` at a version below what analyzer 13 requires. Run it externally
+# until pub.dev publishes a release whose constraints align with Flutter's.
