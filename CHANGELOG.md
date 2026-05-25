@@ -5,6 +5,16 @@ All notable changes to cartographer will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.1] - 2026-05-26
+
+### Fixed
+- `cartographer --project .` crashed with
+  `Invalid argument(s): Only absolute normalized paths are supported`
+  because `Directory('.').absolute.path` is absolute but contains a `./`
+  segment that `package:analyzer` rejects. Project and lib paths are
+  now normalized via `path.normalize()` before being handed to the
+  analyzer.
+
 ## [0.2.0] - 2026-05-26
 
 ### Changed

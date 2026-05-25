@@ -78,9 +78,12 @@ Future<SitemapResult> extractSitemap({
   }
 
   final cfg = config ?? await CartographerConfig.load(projectRoot);
-  final rootPath = projectRoot.absolute.path;
+  // package:analyzer requires absolute AND normalized paths — `Directory('.')`
+  // gives an absolute path that still contains `./`, which it rejects.
+  final rootPath = p.normalize(projectRoot.absolute.path);
+  final libPath = p.normalize(libDir.absolute.path);
   final collection = AnalysisContextCollection(
-    includedPaths: [libDir.absolute.path],
+    includedPaths: [libPath],
   );
 
   bool excluded(String filePath) {
