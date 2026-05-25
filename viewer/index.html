@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cartographer · App Sitemap</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script>
+    // Pre-paint theme detection so light-mode users don't see a dark flash.
+    (function () {
+      var t = localStorage.getItem('cart-theme');
+      if (t !== 'light' && t !== 'dark') {
+        t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+      }
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+</head>
+<body class="mode-2d">
+  <button id="sidebar-expand" title="Show sidebar" aria-label="Show sidebar">›</button>
+
+  <aside id="sidebar">
+    <header>
+      <div class="header-row">
+        <div>
+          <h1>Cartographer</h1>
+          <p class="subtitle">App Sitemap</p>
+        </div>
+        <button id="sidebar-collapse" title="Hide sidebar" aria-label="Hide sidebar">‹</button>
+      </div>
+    </header>
+
+    <section class="panel">
+      <h2>Map</h2>
+      <select id="map-select" class="map-select"></select>
+      <button id="upload-btn" class="upload-btn" type="button" title="Load a cartographer JSON snapshot">
+        Upload JSON…
+      </button>
+      <input id="upload-input" type="file" accept=".json,application/json" hidden />
+    </section>
+
+    <section class="panel">
+      <h2>Legend</h2>
+      <ul class="legend" id="legend-list"></ul>
+      <ul class="legend edges">
+        <li><span class="line solid"></span> Push</li>
+        <li><span class="line dashed"></span> Embedded child</li>
+      </ul>
+    </section>
+
+    <section class="panel" id="depth-legend">
+      <h2>Path depth</h2>
+      <p class="hint" style="margin:0 0 6px">Steps from entry node</p>
+      <div class="depth-strip" id="depth-strip"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Filter</h2>
+      <div id="filter-buttons" class="filter-buttons"></div>
+    </section>
+
+    <section class="panel" id="info-panel">
+      <h2>Node Info</h2>
+      <div id="info-content">
+        <p class="hint">Hover a node to highlight its connections. Click to pin its details.</p>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Controls</h2>
+      <div class="controls">
+        <button id="btn-restart">Reset layout</button>
+        <button id="btn-zoom-reset">Reset view</button>
+        <button id="btn-reset">Reset filters</button>
+        <label class="toggle">
+          <input type="checkbox" id="toggle-labels" checked />
+          Show labels
+        </label>
+        <label class="toggle mode-3d-only">
+          <input type="checkbox" id="toggle-rotate" />
+          Auto-rotate
+        </label>
+      </div>
+    </section>
+
+    <footer>
+      <p id="stats-line"></p>
+    </footer>
+  </aside>
+
+  <main id="canvas">
+    <div class="top-right-bar">
+      <label class="path-switch" title="Show shortest path from the entry point to the clicked node">
+        <input type="checkbox" id="path-mode-toggle" />
+        <span class="track"><span class="thumb"></span></span>
+        <span class="label-text">Path mode</span>
+      </label>
+      <div class="mode-switch" role="tablist" aria-label="View mode">
+        <button data-mode="2d" type="button" role="tab">2D</button>
+        <button data-mode="3d" type="button" role="tab">3D</button>
+      </div>
+      <button id="theme-toggle" class="icon-btn" type="button" title="Toggle light / dark mode" aria-label="Toggle light / dark mode">
+        <span class="theme-icon-dark">☾</span>
+        <span class="theme-icon-light">☀</span>
+      </button>
+    </div>
+
+    <!-- 2D renderer -->
+    <svg id="graph">
+      <defs>
+        <marker id="arrow" viewBox="0 -5 10 10" refX="14" refY="0" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0,-5L10,0L0,5" class="arrow-head" />
+        </marker>
+        <marker id="arrow-active" viewBox="0 -5 10 10" refX="14" refY="0" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0,-5L10,0L0,5" class="arrow-head active" />
+        </marker>
+        <marker id="arrow-path" viewBox="0 -5 10 10" refX="14" refY="0" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0,-5L10,0L0,5" class="arrow-head path" />
+        </marker>
+      </defs>
+      <g id="edges-group"></g>
+      <g id="nodes-group"></g>
+    </svg>
+
+    <!-- 3D renderer -->
+    <canvas id="canvas-3d"></canvas>
+    <div id="labels-3d"></div>
+    <div id="gizmo-container">
+      <canvas id="gizmo-canvas" width="110" height="110"></canvas>
+    </div>
+
+    <!-- Vertical tool stack (3D only) -->
+    <div id="view3d-tools">
+      <button class="tool-btn" id="tool-zoom-in" title="Zoom in" aria-label="Zoom in">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="10" cy="10" r="6"></circle>
+          <line x1="14.5" y1="14.5" x2="20" y2="20"></line>
+          <line x1="10" y1="7" x2="10" y2="13"></line>
+          <line x1="7" y1="10" x2="13" y2="10"></line>
+        </svg>
+      </button>
+      <button class="tool-btn" id="tool-zoom-out" title="Zoom out" aria-label="Zoom out">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="10" cy="10" r="6"></circle>
+          <line x1="14.5" y1="14.5" x2="20" y2="20"></line>
+          <line x1="7" y1="10" x2="13" y2="10"></line>
+        </svg>
+      </button>
+      <button class="tool-btn" id="tool-pan" title="Toggle pan-on-drag (left-click pans instead of orbits)" aria-label="Toggle pan mode">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+          <path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V11"></path>
+          <path d="M12 11V4.5a1.5 1.5 0 0 1 3 0V11"></path>
+          <path d="M15 11V6.5a1.5 1.5 0 0 1 3 0v6"></path>
+          <path d="M9 11V8.5a1.5 1.5 0 0 0-3 0V15c0 3 2 6 6 6s6-2.5 6-6v-2"></path>
+        </svg>
+      </button>
+      <button class="tool-btn" id="tool-grid" title="Toggle floor grid" aria-label="Toggle floor grid">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
+          <path d="M3 9l9-5 9 5-9 5z"></path>
+          <path d="M3 9v6l9 5 9-5V9"></path>
+          <path d="M8 7l9 5"></path>
+          <path d="M16 7l-9 5"></path>
+        </svg>
+      </button>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="/data/extracted.js"></script>
+  <script src="core.js"></script>
+  <script src="view-2d.js"></script>
+  <script src="view-3d.js"></script>
+  <script src="main.js"></script>
+  <script>
+    try {
+      const es = new EventSource('/events');
+      es.addEventListener('reload', () => location.reload());
+    } catch (_) { /* SSE unsupported; silent */ }
+  </script>
+</body>
+</html>
