@@ -92,7 +92,8 @@ class NavigationVisitor extends RecursiveAstVisitor<void> {
     }
 
     // Direct Navigator.push.
-    if (_pushMethods.contains(methodName) && _isNavigatorReceiver(node.target)) {
+    if (_pushMethods.contains(methodName) &&
+        _isNavigatorReceiver(node.target)) {
       final dst = _extractPushDestination(node.argumentList);
       _record(dst, 'push');
     }

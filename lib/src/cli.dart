@@ -73,7 +73,8 @@ Future<void> runCli(List<String> args) async {
   }
 
   if (opts['help'] as bool) {
-    stdout.writeln("cartographer — visualize a Flutter app's navigation graph.\n");
+    stdout.writeln(
+        "cartographer — visualize a Flutter app's navigation graph.\n");
     stdout.writeln('Usage: dart run cartographer [options]\n');
     stdout.writeln(parser.usage);
     return;

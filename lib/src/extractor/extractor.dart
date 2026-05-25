@@ -188,7 +188,8 @@ SitemapResult _buildResult({
     nodes.add({
       'id': name,
       'label': name,
-      'cat': config.categoryFor(w.relativePath) ?? _inferCategory(w.relativePath),
+      'cat':
+          config.categoryFor(w.relativePath) ?? _inferCategory(w.relativePath),
       'file': w.relativePath,
     });
   }

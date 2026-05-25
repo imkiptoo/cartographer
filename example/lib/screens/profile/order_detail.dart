@@ -13,8 +13,10 @@ class OrderDetailScreen extends StatelessWidget {
       appBar: AppBar(title: Text('Order $orderId')),
       body: ListView(
         children: [
-          const ListTile(title: Text('Cold Constellations'), trailing: Text('\$12.99')),
-          const ListTile(title: Text('The Quiet Mechanic'), trailing: Text('\$10.50')),
+          const ListTile(
+              title: Text('Cold Constellations'), trailing: Text('\$12.99')),
+          const ListTile(
+              title: Text('The Quiet Mechanic'), trailing: Text('\$10.50')),
           const Divider(),
           ListTile(
             leading: const Icon(Icons.refresh),

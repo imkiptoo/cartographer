@@ -89,7 +89,8 @@ class SitemapServer {
       await req.response.close();
       return;
     }
-    req.response.headers.contentType = ContentType.parse(_contentType(file.path));
+    req.response.headers.contentType =
+        ContentType.parse(_contentType(file.path));
     req.response.headers.add('Cache-Control', 'no-store');
     await req.response.addStream(file.openRead());
     await req.response.close();

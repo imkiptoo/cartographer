@@ -9,9 +9,12 @@ class NotificationsScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('Notifications')),
       body: ListView(
         children: const [
-          SwitchListTile(value: true, onChanged: null, title: Text('Order updates')),
-          SwitchListTile(value: false, onChanged: null, title: Text('New releases')),
-          SwitchListTile(value: false, onChanged: null, title: Text('Promotions')),
+          SwitchListTile(
+              value: true, onChanged: null, title: Text('Order updates')),
+          SwitchListTile(
+              value: false, onChanged: null, title: Text('New releases')),
+          SwitchListTile(
+              value: false, onChanged: null, title: Text('Promotions')),
         ],
       ),
     );

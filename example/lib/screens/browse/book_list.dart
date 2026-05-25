@@ -4,7 +4,8 @@ import '../../utils/nav.dart';
 import 'book_detail.dart';
 
 class BookListScreen extends StatelessWidget {
-  const BookListScreen({super.key, required this.category, required this.filter});
+  const BookListScreen(
+      {super.key, required this.category, required this.filter});
   final String category;
   final String filter;
 

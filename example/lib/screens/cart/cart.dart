@@ -12,7 +12,8 @@ class CartScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('Cart')),
       body: ListView(
         children: const [
-          ListTile(title: Text('Lighthouse at Dusk'), trailing: Text('\$14.99')),
+          ListTile(
+              title: Text('Lighthouse at Dusk'), trailing: Text('\$14.99')),
           ListTile(title: Text('Paper Rivers'), trailing: Text('\$11.50')),
         ],
       ),

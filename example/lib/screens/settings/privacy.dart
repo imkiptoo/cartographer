@@ -9,8 +9,12 @@ class PrivacyScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('Privacy')),
       body: ListView(
         children: const [
-          SwitchListTile(value: false, onChanged: null, title: Text('Personalized recommendations')),
-          SwitchListTile(value: true, onChanged: null, title: Text('Analytics')),
+          SwitchListTile(
+              value: false,
+              onChanged: null,
+              title: Text('Personalized recommendations')),
+          SwitchListTile(
+              value: true, onChanged: null, title: Text('Analytics')),
           ListTile(title: Text('Download my data')),
         ],
       ),
