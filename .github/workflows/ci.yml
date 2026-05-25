@@ -34,6 +34,9 @@ jobs:
       - name: Analyze
         run: dart analyze --fatal-infos
 
+      - name: Test
+        run: dart test --reporter expanded
+
   smoke:
     name: Extract example sitemap
     runs-on: ubuntu-latest
