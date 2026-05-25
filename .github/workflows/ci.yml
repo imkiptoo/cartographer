@@ -14,16 +14,21 @@ concurrency:
 
 jobs:
   lint:
-    name: Format + analyze
+    name: Format + analyze + test
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Dart
-        uses: dart-lang/setup-dart@v1
+      # Flutter (not just Dart) because pub auto-discovers nested pubspecs
+      # under the working directory and the example/ pubspec depends on the
+      # Flutter SDK. Flutter ships Dart, so dart format/analyze/test still
+      # work the same way.
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
         with:
-          sdk: stable
+          channel: stable
+          cache: true
 
       - name: Install dependencies
         run: dart pub get
