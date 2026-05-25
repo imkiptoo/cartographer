@@ -1,0 +1,12 @@
+.dart_tool/
+.packages
+build/
+pubspec.lock
+.idea/
+.vscode/
+*.iml
+.DS_Store
+
+# Regenerable fixture snapshots produced by `cartographer --output`.
+fixture.json
+*.fixture.json
