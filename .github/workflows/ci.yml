@@ -1,0 +1,86 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Cancel in-progress runs of the same workflow on the same branch when a new
+# commit lands — saves CI minutes when iterating on a PR.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Format + analyze
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+
+      - name: Install dependencies
+        run: dart pub get
+
+      - name: Verify formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Analyze
+        run: dart analyze --fatal-infos
+
+  smoke:
+    name: Extract example sitemap
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install cartographer deps
+        run: dart pub get
+
+      - name: Install example deps
+        working-directory: example
+        run: flutter pub get
+
+      - name: Extract sitemap from example
+        run: dart run cartographer --project example --output ci-sitemap.json
+
+      - name: Verify extraction
+        run: |
+          nodes=$(jq '.nodes | length' ci-sitemap.json)
+          edges=$(jq '.edges | length' ci-sitemap.json)
+          cats=$(jq '.categories | length' ci-sitemap.json)
+          echo "Extracted: $nodes nodes, $edges edges, $cats categories"
+          if [ "$nodes" -lt 20 ]; then
+            echo "::error::Expected ~26 nodes, got $nodes — extraction regressed."
+            exit 1
+          fi
+          if [ "$edges" -lt 25 ]; then
+            echo "::error::Expected ~32 edges, got $edges — extraction regressed."
+            exit 1
+          fi
+          if [ "$cats" -lt 6 ]; then
+            echo "::error::Expected at least 6 categories, got $cats."
+            exit 1
+          fi
+
+      - name: Upload sitemap
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: example-sitemap
+          path: ci-sitemap.json
+          retention-days: 14

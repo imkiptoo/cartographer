@@ -1,0 +1,51 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  release:
+    name: Create GitHub release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract version from tag
+        id: ver
+        run: echo "version=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
+
+      - name: Verify pubspec version matches tag
+        run: |
+          tag="${{ steps.ver.outputs.version }}"
+          pubspec_version="v$(grep '^version:' pubspec.yaml | awk '{print $2}')"
+          if [ "$tag" != "$pubspec_version" ]; then
+            echo "::error::Tag $tag does not match pubspec.yaml version $pubspec_version"
+            exit 1
+          fi
+
+      - name: Extract release notes from CHANGELOG
+        id: notes
+        run: |
+          tag="${{ steps.ver.outputs.version }}"
+          stripped="${tag#v}"
+          awk "/^## \\[?$stripped\\]?/{flag=1; next} /^## /&&flag{exit} flag" CHANGELOG.md > release-notes.md
+          if [ ! -s release-notes.md ]; then
+            echo "No CHANGELOG entry for $stripped; using default body." > release-notes.md
+            echo "" >> release-notes.md
+            echo "See CHANGELOG.md for the full history." >> release-notes.md
+          fi
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.ver.outputs.version }}
+          name: cartographer ${{ steps.ver.outputs.version }}
+          body_path: release-notes.md
+          draft: false
+          prerelease: false

@@ -1,5 +1,7 @@
 # cartographer
 
+[![CI](https://github.com/imkiptoo/cartographer/actions/workflows/ci.yml/badge.svg)](https://github.com/imkiptoo/cartographer/actions/workflows/ci.yml)
+
 Auto-discover and visualize a Flutter app's navigation graph as an interactive sitemap.
 
 Dev-only — never bundled into your release build.
